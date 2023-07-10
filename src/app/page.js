@@ -1,7 +1,14 @@
-import Homepage from "@/components/Homepage";
+"use client"
 
-import { gql } from "@apollo/client"
+import Homepage from "@/components/Homepage";
+import NewComponent from "@/components/NewComponent"
+import Products from "@/components/Products";
+
+import { useQuery, gql } from "@apollo/client"
 import client from '../../apollo-client'
+
+import { QUERY_ALL_PRODUCTS } from "./graphql/products/queries";
+
 
 export async function getCountries(){
     const { data } = await client.query({
@@ -22,13 +29,47 @@ export async function getCountries(){
       return  data.countries
 }
 
- 
-export default async function Home(){
-    const countries = await getCountries()
+export async function getPosts(){
+    const {data}  = await client.query({
+        query: gql`
+        query getPosts{
+            posts {
+              edges {
+                node {
+                  id
+                  content
+                  status
+                  excerpt
+                }
+              }
+            }
+          }
+        `
+     })
+     return data.posts
+}
+
+    
+
+
+
+
+export default   function Home(){
+
+    const {data} =   useQuery(QUERY_ALL_PRODUCTS)
+    // const products = data.products.edges.map(node => node)
+    const products = data?.products?.edges.map(({node}) => node)
+    console.log(products)
+    // const countries = await getCountries()
+    // const posts = await getPosts()
+    // const postData = posts.edges.map(({node}) => node)
+    //     console.log(postData)
     return (
       <div>
         <h1>Welcome to the Home Page</h1>
-        <Homepage countries={countries}/>
+        {/* <Homepage countries={countries}/> */}
+        {/* <NewComponent posts={postData}/>  */}
+        <Products products={products} />
       </div>
     );
   };
