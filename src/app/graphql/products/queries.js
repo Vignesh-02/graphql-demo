@@ -24,6 +24,86 @@ query getProducts {
               }
             }
           }
+          ... on SimpleProduct {
+            price
+          }
+        }
+      }
+    }
+  }
+`
+
+
+export const QUERY_PRODUCTS_BASED_ON_PRODUCT_CATEGORIES = gql`
+query ProductsBasedonProductCategories {
+    products {
+      edges {
+        node {
+          productCategories {
+            edges {
+              node {
+                name
+                parentId
+                products (where: {maxPrice: 1.5, minPrice: 1.5){
+                  edges {
+                    node {
+                      name
+                      productTags {
+                        edges {
+                          node {
+                            name
+                            productTagId
+                          }
+                        }
+                      }
+                      productTypes {
+                        edges {
+                          node {
+                            name
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+                productCategoryId
+              }
+            }
+          }
+          productId
+          status
+          image {
+            id
+            link
+          }
+        }
+      }
+    }
+  }
+`
+
+
+export const QUERY_PRODUCTS_BASED_ON_SEARCH = gql`
+
+`
+
+
+export const QUERY_GET_PRODUCTS_BASED_PRODUCT_TAGS = gql`
+query MyQuery{
+    productTags {
+      edges {
+        node {
+          id
+          name
+          productTagId
+          products {
+            edges {
+              node {
+                name
+                productId
+              }
+            }
+          }
         }
       }
     }

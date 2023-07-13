@@ -67,3 +67,5 @@ query getProduct {
     }
   }
 `
+
+// shortDescription will give you 
